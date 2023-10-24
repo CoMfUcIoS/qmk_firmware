@@ -149,7 +149,8 @@ bool oled_task_kb(void) {
         oled_render_layer_state();
         oled_render_keylog();
     } else {
-        oled_render_logo();
+        oled_render_layer_state();
+        oled_render_keylog();
     }
     return false;
 }
