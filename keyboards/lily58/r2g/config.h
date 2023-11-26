@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 
 
-#   define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
+// #   define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 #   define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
 #   define ENABLE_RGB_MATRIX_ALPHAS_MODS
 // #   define ENABLE_RGB_MATRIX_BREATHING
