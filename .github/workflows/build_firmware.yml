@@ -11,13 +11,14 @@ on:
         description: 'Branch to build'
         options: [master, develop]
       keyboard:
-        type: choice
+        type: string
         description: 'Keyboard to build'
-        options: [ferris/sweep]
+        default: ferris/sweep
       keymap:
-        type: choice
+        type: string
         description: 'Keymap to build'
-        options: [default, via]
+        default: via
+
 
 concurrency: ci_build-${{ github.event.inputs.branch || github.ref_name }}
 
