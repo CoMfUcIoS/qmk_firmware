@@ -11,13 +11,11 @@ on:
         description: 'Branch to build'
         options: [master, develop]
       keyboard:
-        type: string
         description: 'Keyboard to build'
-        default: ferris/sweep
+        default: 'ferris/sweep'
       keymap:
-        type: string
         description: 'Keymap to build'
-        default: via
+        default: 'via'
 
 
 concurrency: ci_build-${{ github.event.inputs.branch || github.ref_name }}
@@ -31,8 +29,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: ${{ fromJson(github.event.inputs.keyboard) }}
-        keymap: ${{ fromJson(github.event.inputs.keymap) }}
+        keyboard: ["${{ github.event.inputs.keyboard }}"]
+        keymap: ["${{ github.event.inputs.keymap }}"]
 
     container: ghcr.io/qmk/qmk_cli
 
