@@ -25,7 +25,7 @@ concurrency: ci_build-${{ github.event.inputs.branch || github.ref_name }}
 jobs:
   ci_builds:
     name: "CI Build"
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 1380
 
     strategy:
