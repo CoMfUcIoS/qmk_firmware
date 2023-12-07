@@ -30,8 +30,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        keyboard: ${{ github.event.inputs.keyboard }}
-        keymap: ${{ github.event.inputs.keymap }}
+        keyboard: ${{ fromJson(inputs.keyboard) }}
+        keymap: ${{ fromJson(inputs.keymap) }}
 
     container: ghcr.io/qmk/qmk_cli
 
