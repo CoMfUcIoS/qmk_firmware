@@ -18,6 +18,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LGUI,  KC_LALT,  XXXXXXX,  XXXXXXX,  LT(1,KC_LNG2),LALT_T(KC_SPC),               RALT_T(KC_ENT),LT(2,KC_LNG1),XXXXXXX, XXXXXXX, KC_RALT,  KC_APP,
         XXXXXXX,
         XXXXXXX
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     ),
 
     [_LOWER] = LAYOUT(
@@ -29,6 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,      KC_WWW_BACK,    MS_BTN2, KC_WWW_FORWARD, _______,
         _______,      _______,        MS_BTN2, _______,        _______,
         XXXXXXX
+        ,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     ),
 
     [_RAISE] = LAYOUT(
@@ -41,6 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,      KC_WWW_BACK,    MS_BTN2, KC_WWW_FORWARD, _______,
         _______,      _______,        MS_BTN2, _______,        _______,
         XXXXXXX
+        ,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     ),
 
     [_ADJUST] = LAYOUT(
@@ -53,6 +56,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,      _______,        _______,    _______,        _______,
         _______,      _______,        _______,    _______,        _______,
         XXXXXXX
+        ,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     )
 };
 
