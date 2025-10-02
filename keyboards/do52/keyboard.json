@@ -21,6 +21,8 @@
         "vid": "0xFEA6"
     },
     "ps2": {
+        "clock_pin": "GP23",
+        "data_pin": "GP22",
         "driver": "vendor",
         "enabled": true,
         "mouse_enabled": true
