@@ -10,13 +10,12 @@ This is a lean setup to avoid space-consuming local build environment in your co
 
 The following are required to get started:
 
-* [GitHub Account](https://github.com/new)
-  * A working account is required to setup and host your repository for GitHub Actions to build QMK firmware.
-* [Text editor](newbs_learn_more_resources#text-editor-resources)
-  * You’ll need a program that can edit and save plain text files. The default editor that comes with many OS's does not save plain text files, so you'll need to make sure that whatever editor you chose does.
-* [Toolbox](https://github.com/qmk/qmk_toolbox)
-  * A graphical program for Windows and macOS that allows you to both program and debug your custom keyboard.
-
+- [GitHub Account](https://github.com/new)
+    - A working account is required to setup and host your repository for GitHub Actions to build QMK firmware.
+- [Text editor](newbs_learn_more_resources#text-editor-resources)
+    - You’ll need a program that can edit and save plain text files. The default editor that comes with many OS's does not save plain text files, so you'll need to make sure that whatever editor you chose does.
+- [Toolbox](https://github.com/qmk/qmk_toolbox)
+    - A graphical program for Windows and macOS that allows you to both program and debug your custom keyboard.
 
 ## Environment Setup
 
@@ -42,32 +41,33 @@ Install Homebrew following the instructions on https://brew.sh. Git will be part
 
 It's very likely that you already have Git installed. If not, use one of the following commands:
 
-* Debian / Ubuntu / Devuan: `sudo apt install -y git`
-* Fedora / Red Hat / CentOS: `sudo yum -y install git`
-* Arch / Manjaro: `sudo pacman --needed --noconfirm -S git`
-* Void: `sudo xbps-install -y git`
-* Solus: `sudo eopkg -y install git`
-* Sabayon: `sudo equo install dev-vcs/git`
-* Gentoo: `sudo emerge dev-vcs/git`
+- Debian / Ubuntu / Devuan: `sudo apt install -y git`
+- Fedora / Red Hat / CentOS: `sudo yum -y install git`
+- Arch / Manjaro: `sudo pacman --needed --noconfirm -S git`
+- Void: `sudo xbps-install -y git`
+- Solus: `sudo eopkg -y install git`
+- Sabayon: `sudo equo install dev-vcs/git`
+- Gentoo: `sudo emerge dev-vcs/git`
 
 ::::
 
 ### 2. GitHub authentication
 
 If your GitHub account is not configured for [authenticated Git operations](https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/), you will need to setup at least one of the following:
-* [Personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-* [Connecting with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+
+- [Personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- [Connecting with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
 
 ### 3. Create a repository
 
 You will need a personal GitHub repository to host your QMK code. Follow [this guide](https://docs.github.com/en/get-started/quickstart/create-a-repo#create-a-repository) to create one named `qmk_keymap`. Do not proceed to commit any files just yet.
-
 
 ## Initial Code Commit
 
 ### Create template files
 
 Run the following commands in your computer to create a folder with a few template files:
+
 ```
 mkdir -p ~/qmk_keymap/.github/workflows
 touch ~/qmk_keymap/.github/workflows/build.yml
@@ -96,60 +96,62 @@ Visit the [QMK Configurator](https://config.qmk.fm/#/) to create a keymap file:
 ### Add a GitHub Action workflow
 
 Open the file `~/qmk_keymap/.github/workflows/build.yml` with your favorite [text editor](newbs_learn_more_resources#text-editor-resources), paste the following workflow content, and save it:
+
 ```yml
 name: Build QMK firmware
 on: [push, workflow_dispatch]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    container: ghcr.io/qmk/qmk_cli
-    strategy:
-      fail-fast: false
-      matrix:
-# List of keymap json files to build
-        file:
-        - username.json
-# End of json file list
+    build:
+        runs-on: ubuntu-latest
+        container: ghcr.io/qmk/qmk_cli
+        strategy:
+            fail-fast: false
+            matrix:
+                # List of keymap json files to build
+                file:
+                    - username.json
+        # End of json file list
 
-    steps:
+        steps:
+            - name: Disable git safe directory checks
+              run: git config --global --add safe.directory '*'
 
-    - name: Disable git safe directory checks
-      run : git config --global --add safe.directory '*'
+            - name: Checkout QMK
+              uses: actions/checkout@v3
+              with:
+                  repository: qmk/qmk_firmware
+                  submodules: recursive
 
-    - name: Checkout QMK
-      uses: actions/checkout@v3
-      with:
-        repository: qmk/qmk_firmware
-        submodules: recursive
+            - name: Checkout userspace
+              uses: actions/checkout@v3
+              with:
+                  path: users/${{ github.actor }}
 
-    - name: Checkout userspace
-      uses: actions/checkout@v3
-      with:
-        path: users/${{ github.actor }}
+            - name: Build firmware
+              run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
 
-    - name: Build firmware
-      run: qmk compile "users/${{ github.actor }}/${{ matrix.file }}"
-
-    - name: Archive firmware
-      uses: actions/upload-artifact@v3
-      continue-on-error: true
-      with:
-        name: ${{ matrix.file }}_${{ github.actor }}
-        path: |
-          *.hex
-          *.bin
-          *.uf2
+            - name: Archive firmware
+              uses: actions/upload-artifact@v4
+              continue-on-error: true
+              with:
+                  name: ${{ matrix.file }}_${{ github.actor }}
+                  path: |
+                      *.hex
+                      *.bin
+                      *.uf2
 ```
+
 Replace `username.json` with the JSON file name that was downloaded from [QMK Configurator](https://config.qmk.fm/#/) in the previous step.
 
 ::: warning
-Do note that the `build.yml` file requires ***proper indentation*** for every line. Incorrect spacing will trigger workflow syntax errors.
+Do note that the `build.yml` file requires **_proper indentation_** for every line. Incorrect spacing will trigger workflow syntax errors.
 :::
 
 ### Commit files to GitHub
 
 If you have completed all steps correctly, the folder `qmk_keymap/` will contain the following files:
+
 ```
 ├── .github
 │   └── workflows
@@ -161,6 +163,7 @@ If you have completed all steps correctly, the folder `qmk_keymap/` will contain
 ```
 
 To commit and push them into GitHub, run the following commands (replacing `gh-username` with your GitHub user name):
+
 ```
 cd ~/qmk_keymap
 git init
@@ -170,6 +173,7 @@ git branch -M main
 git remote add origin https://github.com/gh-username/qmk_keymap.git
 git push -u origin main
 ```
+
 ::: tip
 Use your GitHub personal access token at the password prompt. If you have setup SSH access, replace `https://github.com/gh-username/qmk_keymap.git` with `git@github.com:gh-username/qmk_keymap.git` in the remote origin command above.
 :::
@@ -177,6 +181,7 @@ Use your GitHub personal access token at the password prompt. If you have setup 
 ### Review workflow output
 
 Files committed to GitHub in the previous step will automatically trigger the workflow to build the JSON file listed in `build.yml`. To review its output:
+
 1. Visit your "**qmk_keymap**" repository page on [GitHub](https://github.com/).
 2. Select **Actions** tab to display the "**Build QMK Firmware**" workflow.
 3. Select that workflow to display its run from the last commit.
@@ -185,21 +190,21 @@ Files committed to GitHub in the previous step will automatically trigger the wo
 
 Download and flash the firmware file into your keyboard using [QMK Toolbox](newbs_flashing#flashing-your-keyboard-with-qmk-toolbox).
 
-
 ## Customising your keymap
 
 This setup and workflow relies on the QMK [Userspace](feature_userspace) feature. The build process will copy the QMK source codes and clone your repository into its `users/` folder in a container. You must adhere to the following guidelines when customising your keymaps:
 
-* Keymap layout files must be retained in JSON format and cannot be converted to `keymap.c`.
-* User callback and functions (e.g. `process_record_user()`) can be placed in the `source.c` file.
-* Multiple keymap JSON files can be built in the same workflow. List them under `matrix.file:`, e.g.:
-```yml
-        file:
-        - planck.json
-        - crkbd.json
-```
-* Code changes will require Git commit into GitHub to trigger the build workflow.
+- Keymap layout files must be retained in JSON format and cannot be converted to `keymap.c`.
+- User callback and functions (e.g. `process_record_user()`) can be placed in the `source.c` file.
+- Multiple keymap JSON files can be built in the same workflow. List them under `matrix.file:`, e.g.:
 
+```yml
+file:
+    - planck.json
+    - crkbd.json
+```
+
+- Code changes will require Git commit into GitHub to trigger the build workflow.
 
 ::: tip
 See [GitHub Actions guide](https://docs.github.com/en/actions/learn-github-actions) to learn more about development workflow.
