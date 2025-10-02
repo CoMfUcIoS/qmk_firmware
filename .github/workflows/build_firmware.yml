@@ -6,15 +6,16 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        type: choice
         description: Branch to build
-        options: [master, develop]
+        options: do52
+        required: true
       keyboard:
         description: Keyboard to build
-        default: ferris/sweep
+        default: do52
+        required: true
       keymap:
         description: Keymap to build
-        default: via
+        default: default
 concurrency: ci_build-${{ github.event.inputs.branch || github.ref_name }}
 jobs:
   ci_builds:
